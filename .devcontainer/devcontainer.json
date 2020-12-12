@@ -1,0 +1,19 @@
+{
+    "name": "spark-dev-box",
+    "image": "lisy09/scala-dev-base:1.0-scala2.12.12",
+
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "metals.sbtScript": "/usr/bin/sbt"
+    },
+
+    "extensions": [
+        "scala-lang.scala",
+        "scalameta.metals"
+    ],
+    "workspaceMount": "",
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/root/workspace,type=bind,consistency=cached"
+    ],
+    "workspaceFolder": "/root/workspace"
+}

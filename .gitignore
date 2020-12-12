@@ -1,0 +1,7 @@
+/.bloop/
+/.metals/
+/target
+/project/*
+!/project/plugins.sbt
+!/project/build.properties
+/build_results/
