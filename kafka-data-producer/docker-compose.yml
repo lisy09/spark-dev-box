@@ -1,0 +1,14 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: app
+services: 
+  kafka-data-producer:
+    image: ${DOCKER_REPO}kafka-data-producer:${DOCKER_TAG}
+    container_name: kafka-data-producer
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./conf/app.yaml:/workspace/conf/app.yaml
+    command: /bin/sh -c "python -m server.main"

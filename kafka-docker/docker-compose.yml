@@ -1,0 +1,20 @@
+version: '3'
+networks:
+  default:
+    external: 
+      name: app
+services:
+  zookeeper:
+    image: ${DOCKER_REPO}zookeeper:${ZOOKEEPER_DOCKER_TAG}
+    ports:
+      - ${ZOOKEEPER_CLIENT_PORT}:${ZOOKEEPER_CLIENT_PORT}
+  kafka:
+    image: ${DOCKER_REPO}kafka:${KAFKA_DOCKER_TAG}
+    ports:
+      - ${KAFKA_PORT}:${KAFKA_PORT}
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ADVERTISED_PORT=${KAFKA_PORT}
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_CLIENT_PORT}
+    depends_on: 
+      - zookeeper

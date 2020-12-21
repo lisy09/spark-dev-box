@@ -1,0 +1,13 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: app
+services: 
+  word-count-api:
+    image: ${DOCKER_REPO}word-count-api:${DOCKER_TAG}
+    container_name: word-count-api
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./conf/app.yaml:/workspace/conf/app.yaml

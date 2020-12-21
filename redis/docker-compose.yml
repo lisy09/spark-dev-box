@@ -1,0 +1,12 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: app
+services: 
+  redis:
+    image: redis:${DOCKER_TAG}
+    container_name: redis
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}

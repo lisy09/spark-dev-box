@@ -1,0 +1,24 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: app
+services: 
+  livy:
+    image: ${DOCKER_REPO}livy:${DOCKER_TAG}
+    container_name: livy
+    restart: always
+    environment:
+      - HADOOP_CONF_DIR=/etc/hadoop/
+    ports:
+      - ${LIVY_PORT_INTERNAL}:${LIVY_PORT_INTERNAL}
+    volumes: 
+      - ${PWD}/conf/livy.conf:${LIVY_CONF_DIR}/livy.conf
+      - ${PWD}/conf/log4j.properties:${LIVY_CONF_DIR}/log4j.properties
+      - ${PWD}/conf/spark-blacklist.conf:${LIVY_CONF_DIR}/spark-blacklist.conf
+      - ${PWD}/../hadoop-docker/conf/:/etc/hadoop/
+      - livy_logs:/usr/local/livy/logs
+      - ${PWD}/../../spark-app/build_results/spark-app.jar:/root/livy-local-files/spark-app.jar
+
+volumes:
+  livy_logs:

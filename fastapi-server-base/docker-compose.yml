@@ -1,0 +1,13 @@
+version: "3"
+# networks:
+#   default:
+#     external:
+#       name: app
+services: 
+  fastapi-server-base:
+    image: ${DOCKER_REPO}fastapi-server-base:${DOCKER_TAG}
+    container_name: fastapi-server-base
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./conf/app.yaml:/workspace/conf/app.yaml

@@ -1,25 +1,51 @@
-ifneq (,$(wildcard ./.env))
-    include .env
-    export
-endif
 
-BUILD_SCRIPTS_PATH = ./build_scripts
+ROOT_DIR=${PWD}
+SCRIPT_DIR=${ROOT_DIR}/run_scripts
+
+.PHONY: deploy
+deploy:
+ifeq (,$(shell docker network ls -f name=app -q))
+	@docker network create app
+endif
+	cd ${ROOT_DIR}/vendor/hadoop-docker && make deploy
+	cd ${ROOT_DIR}/vendor/apache-livy-docker && make deploy-livy
+	cd ${ROOT_DIR}/kafka-docker && make deploy
+	cd ${ROOT_DIR}/redis && make deploy
+	cd ${ROOT_DIR}/kafka-data-producer && make deploy
+	cd ${ROOT_DIR}/word-count-api && make deploy
+.PHONY: undeploy
+undeploy:
+	cd ${ROOT_DIR}/vendor/apache-livy-docker && make undeploy-livy
+	cd ${ROOT_DIR}/vendor/hadoop-docker && make undeploy
+	cd ${ROOT_DIR}/kafka-docker && make undeploy
+	cd ${ROOT_DIR}/redis && make undeploy
+	cd ${ROOT_DIR}/kafka-data-producer && make undeploy
+	cd ${ROOT_DIR}/word-count-api && make undeploy
+	docker network rm app
+
+.PHONY: redeploy-livy
+redeploy-livy:
+	cd ${ROOT_DIR}/vendor/apache-livy-docker && make undeploy-livy && make deploy-livy
 
 .PHONY: all
-all: base  
+all:
+	cd ${ROOT_DIR}/vendor/apache-livy-docker && make all
+	cd ${ROOT_DIR}/vendor/hadoop-docker && make all
+	cd ${ROOT_DIR}/kafka-docker && make all
+	cd ${ROOT_DIR}/spark-app && make base && make jar
 
-.PHONY: base
-base:
-	$(BUILD_SCRIPTS_PATH)/build_scala_base.sh
+.PHONY: jar
+jar:
+	cd ${ROOT_DIR}/spark-app && make jar
 
-.PHONY: push
-push:
-	$(BUILD_SCRIPTS_PATH)/push_images.sh
+.PHONY: submit
+submit:
+	bash ${SCRIPT_DIR}/submit_to_livy.sh
 
-.PHONY: clean
-clean:
-	$(BUILD_SCRIPTS_PATH)/delete_local_images.sh
+.PHONY: send-batch
+send-batch:
+	cd ${ROOT_DIR}/kafka-data-producer && make send-batch
 
-.PHONY: run-base
-run-base:
-	$(BUILD_SCRIPTS_PATH)/run_scala_base.sh
+.PHONY: view-topic
+view-topic:
+	cd ${ROOT_DIR}/kafka-docker && make view-topic

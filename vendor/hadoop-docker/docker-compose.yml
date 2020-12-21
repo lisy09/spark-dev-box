@@ -1,0 +1,83 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: app
+services:
+  namenode:
+    image: ${DOCKER_REPO}hadoop-namenode:${DOCKER_TAG}
+    container_name: namenode
+    restart: always
+    ports:
+      - ${NAMENODE_PORT_INTERNAL}:${NAMENODE_PORT_INTERNAL}
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    environment:
+      - CLUSTER_NAME=test
+
+  datanode:
+    image: ${DOCKER_REPO}hadoop-datanode:${DOCKER_TAG}
+    container_name: datanode
+    restart: always
+    ports:
+      - ${DATANODE_PORT_INTERNAL}:${DATANODE_PORT_INTERNAL}
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    depends_on: 
+      - namenode
+  
+  resourcemanager:
+    image: ${DOCKER_REPO}hadoop-resourcemanager:${DOCKER_TAG}
+    container_name: resourcemanager
+    restart: always
+    ports:
+      - ${RESOURCEMANAGER_PORT_INTERNAL}:${RESOURCEMANAGER_PORT_INTERNAL}
+    depends_on: 
+      - namenode
+      - datanode
+
+  nodemanager1:
+    image: ${DOCKER_REPO}hadoop-nodemanager:${DOCKER_TAG}
+    container_name: nodemanager
+    restart: always
+    ports:
+      - ${NODEMANAGER_PORT_INTERNAL}:${NODEMANAGER_PORT_INTERNAL}
+    volumes: 
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    depends_on: 
+      - namenode
+      - datanode
+      - resourcemanager
+  
+  historyserver:
+    image: ${DOCKER_REPO}hadoop-historyserver:${DOCKER_TAG}
+    container_name: historyserver
+    restart: always
+    depends_on: 
+      - namenode
+      - datanode
+      - resourcemanager
+    ports:
+      - ${HISTORYSERVER_PORT_INTERNAL}:${HISTORYSERVER_PORT_INTERNAL}
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  hadoop_historyserver:

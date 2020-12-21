@@ -1,0 +1,20 @@
+version: "3"
+# networks:
+#   default:
+#     external:
+#       name: app
+services: 
+  fastapi-server-base:
+    build:
+      context: ..
+      dockerfile: ./.devcontainer/Dockerfile
+      args:
+        VARIANT: "3.9"
+        INSTALL_NODE: "false"
+    container_name: fastapi-server-base
+    # restart: always
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ..:/workspace:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
