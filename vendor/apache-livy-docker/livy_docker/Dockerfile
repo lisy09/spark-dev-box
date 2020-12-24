@@ -44,4 +44,8 @@ RUN ln -s /usr/local/${PREBUILT_LIVY} /usr/local/livy
 # Set the Livy logs folder and start the server
 SHELL ["/bin/bash", "-c"]
 RUN mkdir -p /usr/local/${PREBUILT_LIVY}/logs
-CMD ["/usr/local/livy/bin/livy-server"]
+
+ENV HADOOP_CONF_DIR /etc/hadoop/conf
+ENV HADOOP_CONF_DIR_ORIGIN /etc/hadoop/conf_origin
+COPY livy-entrypoint.sh /usr/local/
+CMD ["bash", "/usr/local/livy-entrypoint.sh"]
