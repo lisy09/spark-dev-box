@@ -30,3 +30,8 @@ undeploy:
 .PHONY: view-topic
 view-topic:
 	$(RUN_SCRIPTS_PATH)/view_kafka_topic.sh
+
+.PHONY: push
+BUILD_SCRIPTS_PATH:
+	$(BUILD_SCRIPTS_PATH)/push_images.sh
+

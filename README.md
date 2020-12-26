@@ -36,17 +36,22 @@ make deploy
 *Need `curl` installed*
 
 ```bash
-curl -X POST -H "Content-Type: application/json" -H "X-Requested-By: user" -d '{"file":"file:///root/livy-local-files/spark-app.jar","className":"com.lisy09.spark_dev_box.KafkaWordCountExample"}' http://localhost:${LIVY_PORT_INTERNAL}/batches
-```
-
-or
-```bash
 make submit
 ```
 
 ### Step3. Start the kafka client to produce streaming data
 
+```bash
+make send-batch
+```
+
 ### Step4. Check latest state stored at redis through a HTTP server
+
+```bash
+curl -X GET "http://localhost:8001/v1/wordcount" -H  "accept: application/json"
+```
+
+or check the API GET /v1/wordcount at http://localhost:8001/docs
 
 ### StepX. Undeploy
 

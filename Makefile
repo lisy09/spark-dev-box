@@ -34,6 +34,12 @@ all:
 	cd ${ROOT_DIR}/kafka-docker && make all
 	cd ${ROOT_DIR}/spark-app && make base && make jar
 
+.PHONY: push-images
+push-images:
+	cd ${ROOT_DIR}/vendor/apache-livy-docker && make push
+	cd ${ROOT_DIR}/vendor/hadoop-docker && make push
+	cd ${ROOT_DIR}/kafka-docker && make push
+
 .PHONY: jar
 jar:
 	cd ${ROOT_DIR}/spark-app && make jar

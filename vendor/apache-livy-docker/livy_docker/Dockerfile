@@ -14,6 +14,7 @@ RUN apt-get update && DEBIAN_FRONTED=noninteractive apt-get install -y --no-inst
     curl \
     gnupg \
     unzip \
+    xmlstarlet \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://dist.apache.org/repos/dist/release/spark/KEYS
