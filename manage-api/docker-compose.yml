@@ -1,0 +1,13 @@
+version: "3"
+# networks:
+#   default:
+#     external:
+#       name: app
+services: 
+  manage-api:
+    image: ${DOCKER_REPO}manage-api:${DOCKER_TAG}
+    container_name: manage-api
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./conf/app.yaml:/workspace/conf/app.yaml

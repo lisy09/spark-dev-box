@@ -1,0 +1,34 @@
+# logLevel: DEBUG,INFO
+logLevel: DEBUG
+# logAllModules: true
+requestTimeout: 5
+gunicorn:
+  # worker_per_core will be ignored when workers is set
+  worker_per_core: 1
+  # max_workers will be ignored when workers is set
+  max_workers: 8
+  # workers: 4
+  log:
+    access: "-"
+    error: "-"
+  grateful_timeout: 120
+  timeout: 120
+  keepalive: 5
+bind: 0.0.0.0:8002
+livy:
+  url: http://livy:8998
+  jarPath: file:///root/livy-local-files/spark-app.jar
+  className: com.lisy09.spark_dev_box.kafka_word_count.Main
+  wordCountUpdateUrl: http://word-count-api:8001/v1/wordcount
+  queue: default
+  numExecutors: 1
+  executorMemory: 1g
+  executorCores: 1
+  driverMemory: 2g
+  kafka:
+    brokers: kafka:9092
+    topics: test_topic
+    groupId: test_group
+  duration:
+    # seconds
+    batch: 10

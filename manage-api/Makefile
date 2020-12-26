@@ -32,3 +32,11 @@ undeploy:
 .PHONY: export-api
 export-api:
 	bash ${BUILD_SCRIPTS_PATH}/export_api.sh
+	
+.PHONY: submit
+submit: 
+	bash ${RUN_SCRIPTS_PATH}/submit_app.sh
+
+.PHONY: unsubmit
+unsubmit: 
+	bash ${RUN_SCRIPTS_PATH}/delete_app.sh

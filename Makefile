@@ -44,6 +44,10 @@ push-images:
 jar:
 	cd ${ROOT_DIR}/spark-app && make jar
 
+.PHONY: export-api
+export-api:
+	cd ${ROOT_DIR}/spark-app && make jar
+
 .PHONY: submit
 submit:
 	bash ${SCRIPT_DIR}/submit_to_livy.sh

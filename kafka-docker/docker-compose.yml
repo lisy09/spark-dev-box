@@ -6,10 +6,12 @@ networks:
 services:
   zookeeper:
     image: ${DOCKER_REPO}zookeeper:${ZOOKEEPER_DOCKER_TAG}
+    container_name: zookeeper
     ports:
       - ${ZOOKEEPER_CLIENT_PORT}:${ZOOKEEPER_CLIENT_PORT}
   kafka:
     image: ${DOCKER_REPO}kafka:${KAFKA_DOCKER_TAG}
+    container_name: kafka
     ports:
       - ${KAFKA_PORT}:${KAFKA_PORT}
     environment:
