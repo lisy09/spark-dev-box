@@ -13,6 +13,7 @@ endif
 	cd ${ROOT_DIR}/redis && make deploy
 	cd ${ROOT_DIR}/kafka-data-producer && make deploy
 	cd ${ROOT_DIR}/word-count-api && make deploy
+	cd ${ROOT_DIR}/manage-api && make deploy
 .PHONY: undeploy
 undeploy:
 	cd ${ROOT_DIR}/vendor/apache-livy-docker && make undeploy-livy
@@ -21,6 +22,7 @@ undeploy:
 	cd ${ROOT_DIR}/redis && make undeploy
 	cd ${ROOT_DIR}/kafka-data-producer && make undeploy
 	cd ${ROOT_DIR}/word-count-api && make undeploy
+	cd ${ROOT_DIR}/manage-api && make undeploy
 	docker network rm app
 
 .PHONY: redeploy-livy
@@ -33,6 +35,9 @@ all:
 	cd ${ROOT_DIR}/vendor/hadoop-docker && make all
 	cd ${ROOT_DIR}/kafka-docker && make all
 	cd ${ROOT_DIR}/spark-app && make base && make jar
+	cd ${ROOT_DIR}/kafka-data-producer && make server
+	cd ${ROOT_DIR}/word-count-api && make server
+	cd ${ROOT_DIR}/manage-api && make server
 
 .PHONY: push-images
 push-images:
@@ -50,11 +55,18 @@ export-api:
 
 .PHONY: submit
 submit:
-	bash ${SCRIPT_DIR}/submit_to_livy.sh
+	cd ${ROOT_DIR}/manage-api && make submit
+.PHONY: unsubmit
+unsubmit:
+	cd ${ROOT_DIR}/manage-api && make unsubmit
 
 .PHONY: send-batch
 send-batch:
 	cd ${ROOT_DIR}/kafka-data-producer && make send-batch
+
+.PHONY: curl-wordcount
+curl-wordcount:
+	cd ${ROOT_DIR}/word-count-api && make curl-wordcount
 
 .PHONY: view-topic
 view-topic:

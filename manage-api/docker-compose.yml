@@ -1,8 +1,8 @@
 version: "3"
-# networks:
-#   default:
-#     external:
-#       name: app
+networks:
+  default:
+    external:
+      name: app
 services: 
   manage-api:
     image: ${DOCKER_REPO}manage-api:${DOCKER_TAG}

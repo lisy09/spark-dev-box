@@ -37,3 +37,8 @@ endif
 .PHONY: undeploy
 undeploy:
 	docker-compose --env-file .env -f docker-compose.yml down
+
+.PHONY: curl-wordcount
+curl-wordcount:
+	bash ${RUN_SCRIPTS_PATH}/curl_wordcount.sh
+

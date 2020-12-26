@@ -39,6 +39,12 @@ make deploy
 make submit
 ```
 
+to stop the spark streaming app
+
+```bash
+make unsubmit
+```
+
 ### Step3. Start the kafka client to produce streaming data
 
 ```bash
@@ -48,7 +54,7 @@ make send-batch
 ### Step4. Check latest state stored at redis through a HTTP server
 
 ```bash
-curl -X GET "http://localhost:8001/v1/wordcount" -H  "accept: application/json"
+make curl-wordcount
 ```
 
 or check the API GET /v1/wordcount at http://localhost:8001/docs
