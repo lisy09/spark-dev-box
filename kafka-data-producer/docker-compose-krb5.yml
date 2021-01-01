@@ -1,0 +1,12 @@
+version: "3"
+networks:
+  default:
+    external:
+      name: app
+services: 
+  kafka-data-producer:
+    volumes:
+      - ./conf/app-krb5.yaml:/workspace/conf/app.yaml
+      - ../kerberos-cluster/conf/krb5.conf:/etc/krb5.conf
+      - ../kerberos-cluster/keytabs/kafka-clients.keytab:/var/secret/keytabs/kafka-clients.keytab
+    command: /bin/sh -c "python -m server.main"

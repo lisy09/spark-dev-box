@@ -37,6 +37,18 @@ endif
 undeploy:
 	docker-compose --env-file .env -f docker-compose.yml down
 
+.PHONY: deploy-krb5
+deploy-krb5:
+ifeq (,$(shell docker network ls -f name=app -q))
+	@docker network create app
+endif
+	docker-compose --env-file .env -f docker-compose.yml \
+		-f docker-compose-krb5.yml up -d
+.PHONY: undeploy-krb5
+undeploy-krb5:
+	docker-compose --env-file .env -f docker-compose.yml \
+		-f docker-compose-krb5.yml down
+
 .PHONY: export-api
 export-api:
 	bash ${RUN_SCRIPTS_PATH}/export_api_html.sh
