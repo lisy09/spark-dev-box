@@ -11,6 +11,19 @@ def get_config():
 def get_log_level_config():
     return get_config()["logLevel"]
 
+@lru_cache()
+def get_kerberos_config():
+    config = get_config()
+    if ("kerberos" in config and 
+        "enable" in config["kerberos"] and
+        config["kerberos"]["enable"]):
+        return config["kerberos"] 
+    return None
+
+@lru_cache()
+def get_use_kerberos_config() -> bool:
+    return get_kerberos_config() != None
+
 def get_gunicorn_config(logger_class):
     config = get_config()
     gunicorn_conf = config["gunicorn"]

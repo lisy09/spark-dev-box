@@ -17,4 +17,6 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ..:/workspace:cached
+      - ../../kerberos-cluster/keytabs:/var/secret/keytabs:cached
+      - ../../kerberos-cluster/conf/krb5.conf:/etc/krb5.conf:cached
     command: /bin/sh -c "while sleep 1000; do :; done"

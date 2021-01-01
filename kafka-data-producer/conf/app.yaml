@@ -5,7 +5,7 @@ gunicorn:
   worker_per_core: 1
   # max_workers will be ignored when workers is set
   max_workers: 8
-  # workers: 4
+  workers: 2
   log:
     access: "-"
     error: "-"
@@ -16,3 +16,9 @@ bind: 0.0.0.0:8000
 kafka:
   brokers: kafka:9092
   targetTopic: test_topic
+kerberos:
+  enable: true
+  principal: kafka-clients@EXAMPLE.COM
+  domain: kafka.app
+  kafkaServiceName: kafka
+  keytab: /var/secret/keytabs/kafka-clients.keytab

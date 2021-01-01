@@ -2,6 +2,7 @@ FROM python:3.9-slim
 
 RUN apt-get update && DEBIAN_FRONTED=noninteractive apt-get install -y --no-install-recommends \
     build-essential \
+    krb5-user libpam-krb5 \
     && rm -rf /var/lib/apt/lists/*
     
 COPY requirements.txt /tmp/pip-tmp/

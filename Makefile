@@ -1,4 +1,9 @@
 
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 ROOT_DIR=${PWD}
 SCRIPT_DIR=${ROOT_DIR}/run_scripts
 
@@ -7,18 +12,27 @@ deploy:
 ifeq (,$(shell docker network ls -f name=app -q))
 	@docker network create app
 endif
+ifeq (true,$(shell echo $(USE_KERBEROS) | tr A-Z a-z))
+	cd ${ROOT_DIR}/kerberos-cluster && make deploy
+else
+	cd ${ROOT_DIR}/kafka-docker && make deploy
+endif
 	cd ${ROOT_DIR}/vendor/hadoop-docker && make deploy
 	cd ${ROOT_DIR}/vendor/apache-livy-docker && make deploy-livy
-	cd ${ROOT_DIR}/kafka-docker && make deploy
 	cd ${ROOT_DIR}/redis && make deploy
 	cd ${ROOT_DIR}/kafka-data-producer && make deploy
 	cd ${ROOT_DIR}/word-count-api && make deploy
 	cd ${ROOT_DIR}/manage-api && make deploy
+
 .PHONY: undeploy
 undeploy:
+ifeq (true,$(shell echo $(USE_KERBEROS) | tr A-Z a-z))
+	cd ${ROOT_DIR}/kerberos-cluster && make undeploy
+else
+	cd ${ROOT_DIR}/kafka-docker && make undeploy
+endif
 	cd ${ROOT_DIR}/vendor/apache-livy-docker && make undeploy-livy
 	cd ${ROOT_DIR}/vendor/hadoop-docker && make undeploy
-	cd ${ROOT_DIR}/kafka-docker && make undeploy
 	cd ${ROOT_DIR}/redis && make undeploy
 	cd ${ROOT_DIR}/kafka-data-producer && make undeploy
 	cd ${ROOT_DIR}/word-count-api && make undeploy
